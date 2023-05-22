@@ -14,12 +14,30 @@ api = Blueprint('api', __name__)
 
 @api.route("/signup", methods=["POST"])
 def sign_up():
-    # Ejercicio 2. Completar! Debemos obtener el usuario y password del cuerpo del a petición POST. Luego, añadir el usuario a la base de datos. Puedes comprobar si se ha creado bien el usuario en la pantalla de administración de Flask, o haciendo una consulta a la tabla User. Solo hay que cambiar este método, no toques la URL de la ruta ni añadas el decorador @jwt_required()
+    # Ejercicio 2. Completar! Debemos obtener el usuario y password del cuerpo del a petición POST.
+    # Luego, añadir el usuario a la base de datos. Puedes comprobar si se ha creado bien el usuario en la pantalla de administración de Flask,
+    # o haciendo una consulta a la tabla User. Solo hay que cambiar este método, no toques la URL de la ruta ni añadas el decorador @jwt_required()
+    
+    request_body_user = request.get_json()
+
+    email = request_body_user.get('email')
+    password = request_body_user.get('password')
+
 
     # BONUS: ¿Cómo gestionamos si el usuario ha puesto un email ya presente en la tabla User? Implementa el BONUS cuando acabes todos los ejercicios
+    
+    user = User.query.filter_by(email=email).first()
+    if user:
+        return jsonify({"msg": "Email already in use"}), 409
 
+    
+    new_user = User(email=email, password=password)
+    db.session.add(new_user)
+    db.session.commit()
+        
     # Este return debe cambiarse adecuadamente para devolver un mensaje de OK cuando el usuario se haya creado
-    return jsonify({"msg": "Not implemented"}), 501
+    return jsonify({"msg": "User created successfully", "user": {"email": new_user.email}}), 200
+
 
 
 @api.route('/login', methods=['POST'])
