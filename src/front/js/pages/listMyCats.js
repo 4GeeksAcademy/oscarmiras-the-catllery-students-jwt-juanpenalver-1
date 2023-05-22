@@ -1,6 +1,46 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 
 export const ListMyCats = () => {
-    return <h1>¡Esto lo tienes que implementar! Ejercicio 6 </h1>
+  const [cats, setCats] = useState([]);
+
+  useEffect(() => {
+    const fetchCats = async () => {
+      const token = localStorage.getItem("miTokenJWT");
+
+      if (!token) {
+        // Mmmmm... no tengo el token, no debería poder acceder a está página de React
+        navigate('/login');
+        return;
+      }
+
+      const response = await fetch(process.env.BACKEND_URL + "/api/cats", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setCats(data);
+      } else {
+      setAlertVariant("danger");
+      setAlertMessage(data.error || "Error gatuno");
+      }
+    };
+
+    fetchCats();
+  }, []);
+
+  return (
+    <div>
+      <h2>My Cats</h2>
+      {cats.map((cat, index) => (
+        <div key={index}>
+          <h3>{cat.name}</h3>
+          <img src={cat.image_url} alt={cat.name} />
+        </div>
+      ))}
+    </div>
+  );
 };

@@ -84,6 +84,6 @@ export const NewCat = () => {
         </button>
       </form>
     </div>
-        );
-      };
+  );
+};
       
