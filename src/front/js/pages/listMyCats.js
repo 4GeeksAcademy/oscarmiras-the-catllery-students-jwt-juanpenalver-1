@@ -1,48 +1,69 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-export const ListMyCats = () => {
+export const UserCats = () => {
+  const [cats, setCats] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
   const navigate = useNavigate();
-  // const { store, actions } = useContext(Context);
-  const [favorites, setFavorites] = useState([]);
-  const [userName, setUserName] = useState("");
+
+  const token = localStorage.getItem("miTokenJWT");
+
+  if (!token) {
+    navigate("/login");
+  }
 
   useEffect(() => {
-    const token = localStorage.getItem("miTokenJWT");
+    const fetchUserCats = async () => {
+      try {
+        const response = await fetch(process.env.BACKEND_URL + "/api/cats", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
-    if (!token) {
-      // Mmmmm... no tengo el token, no debería poder acceder a está página de React
-      navigate("/login");
-    }
-
-    const getAllCats = () => {
-
-      fetch(process.env.BACKEND_URL + "/api/cats", {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log(data);
-          setFavorites(data)
-        })
-        .catch((error) => console.log("error", error));
+        if (response.ok) {
+          const data = await response.json();
+          setCats(data);
+        } else {
+          setError("Error al obtener los gatos del usuario");
+        }
+      } catch (error) {
+        setError("Error de conexión");
+      } finally {
+        setLoading(false);
+      }
     };
-    getAllCats()
-  }, []);
+
+    fetchUserCats();
+  }, [token]);
+
+  if (loading) {
+    return <p>Cargando gatos...</p>;
+  }
+
+  if (error) {
+    return <p>Error: {error}</p>;
+  }
 
   return (
-    <div className="container text-center mt-5">
-      <div className="row mt-4">
-        {favorites.map((fav, i) => (
-          <div className="col-3" key={i}>
-            <img src={fav.image_url} />
-            <p className="fw-bold text-success">{fav.name}</p>
-          </div>
-        ))}
-      </div>
+    <div>
+      <h2>Mis Gatos</h2>
+      {cats.length === 0 ? (
+        <p>No tienes gatos</p>
+      ) : (
+        <ul>
+          {cats.map((cat) => (
+            <li key={cat.id}>
+              <h3>{cat.name}</h3>
+              <img src={cat.image_url} alt={cat.name} />
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 };

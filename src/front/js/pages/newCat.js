@@ -41,9 +41,20 @@ export const UserCats = () => {
     fetchUserCats();
   }, [token]);
 
+<<<<<<< HEAD
   if (loading) {
     return <p>Cargando gatos...</p>;
   }
+=======
+    const response = await fetch(process.env.BACKEND_URL + "/api/cat", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
+      },
+      body: JSON.stringify({ name, imageUrl }),
+    });
+>>>>>>> 56b4a7b (Ejercicios hasta el 5)
 
   if (error) {
     return <p>Error: {error}</p>;
