@@ -44,7 +44,9 @@ export const Navbar = () => {
 				</Link>
 
 				<div className="ml-auto d-flex gap-3">
-					{/** Voy a mostrar unos botones u otros en función de si tengo el token. Dicho de otro modo, mi aplicación  cliente React no debe mostrar la misma información a un usuario que dispone el token de otro que no.  Esto es importante de entender: no es Flask que nos está diciendo lo que debemos mostrar o no. Es React quién lo decide.   */}
+					{/** Voy a mostrar unos botones u otros en función de si tengo el token. Dicho de otro modo, 
+					 * mi aplicación  cliente React no debe mostrar la misma información a un usuario que dispone el token de otro que no.  
+					 * Esto es importante de entender: no es Flask que nos está diciendo lo que debemos mostrar o no. Es React quién lo decide.   */}
 					{!tokenExists && (
 						<>
 							<Link to="/signup">

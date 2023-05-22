@@ -22,9 +22,14 @@ export const Login = () => {
             console.log("email a enviar: ", email)
             console.log("password a enviar: ", password)
 
+            const loginInfo = {
+                email: email,
+                password: password,
+            };
 
-            const response = await fetch(process.env.BACKEND_URL + "/login", {
-                method: "GET",
+            const response = await fetch(process.env.BACKEND_URL + "/api/login", {
+                method: "POST",
+                body: JSON.stringify(loginInfo),
                 headers: {
                     "Content-Type": "application/json",
                 },
