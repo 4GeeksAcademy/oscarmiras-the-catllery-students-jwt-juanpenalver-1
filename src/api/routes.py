@@ -111,7 +111,7 @@ def get_user_cats():
     current_user = get_jwt_identity()
 
     # ID de usuario
-    curre_user_id = current_user['id']
+    current_user_id = current_user['id']
 
     # Crea una lista para almacenar los datos de los gatos
     cats_data = []

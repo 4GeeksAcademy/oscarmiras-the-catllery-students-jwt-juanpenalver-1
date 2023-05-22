@@ -34,10 +34,10 @@ export const ListMyCats = () => {
 
   return (
     <div>
-      <h2>My Cats</h2>
+      <h1>My Cats</h1>
       {cats.map((cat, index) => (
         <div key={index}>
-          <h3>{cat.name}</h3>
+          <p>{cat.name}</p>
           <img src={cat.image_url} alt={cat.name} />
         </div>
       ))}
