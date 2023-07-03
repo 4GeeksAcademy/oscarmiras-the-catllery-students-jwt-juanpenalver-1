@@ -52,7 +52,7 @@ def login():
 
     # si no existe, devuelve un mensaje de error y el código 401
     if user == None:
-        return jsonify({"msg": "User or password, Not exist!"}), 401
+        return jsonify({"msg": "User or password, do not exist!"}), 401
 
     # Flask crea un nuevo token JWT. Se lo guarda en su base de datos y lo asocia al usuario que hemos recuperado de la base de datos
     access_token = create_access_token(identity=user.serialize())
@@ -60,7 +60,7 @@ def login():
     # Devolvemos el token (string) al cliente para que en futuras peticiones a nuestros endpoints protegidos se pueda autentificar
     # (cebolla_patata_queso)
     response_body = {
-        "msg": "Token create successfully",
+        "msg": "Token create successfully, you are welcome",
         "token": access_token,
         "email": email
     }
@@ -81,7 +81,7 @@ def post_cat():
 
     # Verifica si se proporcionaron los datos del gato
     if not name or not image_url:
-        return jsonify({"error": "Nombre e imagen del gato son obligatorios"}), 400
+        return jsonify({"error": "Name and cat image are compulsory"}), 400
 
     # Crea un nuevo objeto Cat relacionado con el usuario actual
     cat = Cat(name=name, image_url=image_url, user_id=current_user['id'])
@@ -90,7 +90,7 @@ def post_cat():
     db.session.add(cat)
     db.session.commit()
 
-    return jsonify({"msg": "Gato agregado exitosamente"}), 200
+    return jsonify({"msg": "Cat added succesfully"}), 200
 
 
 @api.route('/hello', methods=['POST', 'GET'])
